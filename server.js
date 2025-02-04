@@ -1,10 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve frontend files correctly
+app.use(express.static("public"));
+
+// API Endpoints
 const questions = [
   {
     question: "What is the most common form of phishing attack?",
@@ -31,6 +36,11 @@ app.post("/submit", (req, res) => {
   });
 
   res.json({ score });
+});
+
+// Redirect all other routes to index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const PORT = 5000;
